@@ -105,6 +105,8 @@ Replaced placeholder values (7777, 9999) with missing; dropped rows with null va
 
 ### Question 5 — Vitamin D Level and Diastolic Blood Pressure (Creative)
 
+**Why:** Vitamin D deficiency has been linked to negative cardiovascular and metabolic health outcomes, although the relationship is complex and not fully confirmed. Some literature suggests that Vitamin D may help lower diastolic blood pressure, although research results are mixed. This question was selected to explore whether participants with different Vitamin D interpretation levels show measurable differences in diastolic blood pressure.
+
 **Variables:** LBDVD2LC (Vitamin D interpretation), BPXODI3 (DBP)
 
 **Cleaning:** Drop missing; keep valid categories.

@@ -143,6 +143,13 @@ cat("XPT to CSV conversion complete.\n")
 
 ---
 
+## Preferred Coding Language
+
+While both R and Python were used in this project, I primarily prefer Python for data analysis and visualization.
+Python’s pandas, scipy, and statsmodels libraries provide an intuitive and efficient workflow for data cleaning, transformation, and inferential testing, while R was used here to demonstrate interoperability and data conversion (.xpt → .csv) within Google Colab.
+
+---
+
 ## Repository Contents
 
 ```

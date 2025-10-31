@@ -1,36 +1,36 @@
 # NHANES Data Analysis Project (2021–2023)
 
-This project explores relationships between demographic, behavioral, and health variables using data from the **National Health and Nutrition Examination Survey (NHANES)** 2021–2023.
+This project explores relationships between demographic, behavioral, and health variables using the **NHANES 2021–2023 cycle**.
 
-Analyses were conducted in **Google Colab**, using **R** for data conversion and **Python** (`pandas`, `scipy`, `statsmodels`) for data cleaning, transformation, and inferential testing.
+Analyses were conducted in **Google Colab**, using **R** for `.xpt` → `.csv` conversion and **Python** (`pandas`, `scipy`, `statsmodels`) for cleaning, transformation, and inferential testing.
 
 ---
 
 ## Project Objective
 
-To investigate associations and differences between key demographic and health indicators using appropriate statistical methods. The project includes four guided analyses and one creative question using cleaned NHANES data.
+Investigate associations and differences between key demographic and health indicators using appropriate statistical methods. Includes four guided analyses and one creative analysis.
 
 ---
 
 ## Data Sources
 
-All datasets were obtained directly from the [NHANES 2021–2023 Continuous Data Portal](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2021-2023).
+All datasets were obtained from the [NHANES 2021–2023 Continuous Data Portal](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2021-2023).
 
 | Dataset | Filename | Key Variables Used |
 |---------|----------|-------------------|
 | Demographics | `DEMO_L.xpt` | Marital status (DMDMARTZ), Education (DMDEDUC2), Age (RIDAGEYR) |
 | Blood Pressure | `BPXO_L.xpt` | Systolic (BPXOSY3), Diastolic (BPXODI3) |
-| Vitamin D | `VID_L.xpt` | Vitamin D lab interpretation (LBDVD2LC) |
+| Vitamin D | `VID_L.xpt` | Vitamin D interpretation (LBDVD2LC) |
 | Kidney – Urology | `KIQ_U_L.xpt` | Weak/failing kidneys (KIQ022) |
-| Physical Activity | `PAQ_L.xpt` | Minutes sedentary (PAD680) |
-| Weight History | `WHQ_L.xpt` | Self-reported weight (WHD020) (optional; primary analyses use BMXWT from BMX_L.xpt) |
+| Physical Activity | `PAQ_L.xpt` | Sedentary minutes (PAD680) |
+| Weight History | `WHQ_L.xpt` | Self-reported weight (WHD020) |
 | Body Measures | `BMX_L.xpt` | Measured weight (BMXWT) |
 
 ---
 
 ## R Integration
 
-R was used to read NHANES SAS transport files (`.xpt`) and export them to `.csv` for use in Python. This demonstrates interoperability between R and Python within Colab.
+R was used to read NHANES SAS transport files (`.xpt`) and export them to `.csv` for use in Python.
 
 ```r
 %%R
@@ -52,94 +52,91 @@ cat("XPT to CSV conversion complete.\n")
 
 ### Question 1 — Association Between Marital Status and Education Level
 
-**Variables:** DMDMARTZ (Marital Status), DMDEDUC2 (Education Level)
+**Variables:** DMDMARTZ (marital status), DMDEDUC2 (education)
 
-**Recoding:**
-- DMDMARTZ: Married (1) vs Not Married (0)
-- DMDEDUC2: Bachelor's degree or higher (1) vs Less than bachelor's (0)
-- Invalid codes (77, 99) removed
+**Recoding/Cleaning:**
+- DMDMARTZ: Married (1) vs Not married (0); remove 77, 99
+- DMDEDUC2: Bachelor's+ (1) vs < Bachelor's (0); remove 7, 9
 
-**Test Used:** Chi-square test of independence  
+**Test:** Chi-square test of independence  
 **Results:** χ²(1) = 128.42, *p* = 9.07 × 10⁻³⁰  
-**Interpretation:** Statistically significant association between marital status and education level (*p* < 0.05). Married adults are more likely to hold a bachelor's degree or higher compared to those not married.
+**Interpretation:** Significant association; married adults are more likely to have a bachelor's degree or higher.
 
 ---
 
 ### Question 2 — Difference in Mean Sedentary Behavior Time by Marital Status
 
-**Variables:** DMDMARTZ (Marital Status), PAD680 (Sedentary Behavior Time in minutes/day → renamed `sedentary_min`)
+**Variables:** DMDMARTZ (marital status), PAD680 (sedentary minutes/day → `sedentary_min`)
 
-**Cleaning:**  
-Removed placeholder values (7777, 9999), dropped missing values, restricted to adult participants (≥ 18 years).
+**Cleaning:** Remove 7777/9999, drop missing, adults only (≥18).
 
-**Test Used:** Welch's *t*-test (unequal variances)  
+**Test:** Welch's *t*-test  
 **Results:** Married = 353.3 min/day (SD = 203.9, n = 4106); Not married = 371.9 min/day (SD = 219.4, n = 3611); *t* = −3.846, *p* = 0.00012  
-**Interpretation:** Statistically significant difference in sedentary time between married and not-married adults (*p* < 0.05). Not-married adults report slightly more sedentary minutes on average.
+**Interpretation:** Significant difference; not-married adults report slightly more sedentary minutes on average.
 
 ---
 
 ### Question 3 — Effect of Age and Marital Status on Systolic Blood Pressure
 
-**Variables:** RIDAGEYR (Age), DMDMARTZ (Marital Status), BPXOSY3 (Systolic BP)
+**Variables:** RIDAGEYR (age), DMDMARTZ (marital status), BPXOSY3 (SBP)
 
-**Cleaning and Recoding:**  
-Removed invalid marital codes (77, 99), excluded null BP readings, recoded Married (1) vs Not Married (0).
+**Cleaning/Recoding:** Remove invalid marital codes; drop missing BP; Married (1) vs Not married (0).
 
-**Test Used:** Multiple Linear Regression (OLS)  
+**Test:** OLS regression (`BPXOSY3 ~ RIDAGEYR + married_bin`)  
 **Results:** β_age = 0.395 (*p* < 0.001); β_married = −1.33 (*p* = 0.003); R² = 0.135  
-**Interpretation:** Systolic BP increases with age; after controlling for age, married adults have slightly lower SBP (−1.3 mmHg). The effects are statistically significant but small.
+**Interpretation:** SBP increases with age; married adults have ≈1.3 mmHg lower SBP after adjustment (small effect).
 
 ---
 
-### Question 4 — Correlation Between Weight and Systolic Blood Pressure
+### Question 4 — Correlation Between Self-Reported Weight and Sedentary Minutes
 
-**Variables:** BMXWT (Weight in kg), BPXOSY3 (Systolic BP in mmHg)
+**Prompt:** Is there a correlation between self-reported weight and minutes of sedentary behavior?
 
-**Cleaning:**  
-Removed placeholder/invalid values (7777, 9999), dropped nulls.
+**Variables:** WHD020 (self-reported weight → `weight_kg`), PAD680 (sedentary minutes/day → `sedentary_min`)
 
-**Test Used:** Pearson Correlation  
+**Cleaning:** Remove 7777/9999; drop missing; adults only.
+
+**Test:** Pearson correlation  
 **Results:** *r* = 0.217, *p* = 5.456 × 10⁻⁸⁰  
-**Interpretation:** Positive linear correlation between body weight and systolic BP (α = 0.05). The correlation is statistically significant but modest in strength.
+**Interpretation:** Positive linear correlation (weak in magnitude but statistically significant). Higher self-reported weight is associated with slightly more sedentary time.
 
 ---
 
-### Question 5 — Vitamin D Level and Diastolic Blood Pressure (Creative Analysis)
+### Question 5 — Vitamin D Level and Diastolic Blood Pressure (Creative)
 
-**Variables:** LBDVD2LC (Vitamin D Interpretation), BPXODI3 (Diastolic BP)
+**Variables:** LBDVD2LC (Vitamin D interpretation), BPXODI3 (DBP)
 
-**Cleaning:**  
-Removed nulls, retained valid two-level Vitamin D interpretations.
+**Cleaning:** Drop missing; keep valid categories.
 
-**Test Used:** One-way ANOVA  
+**Test:** One-way ANOVA  
 **Results:** *F* = 1.367, *p* = 0.2423  
-**Interpretation:** No significant difference in mean diastolic BP across Vitamin D interpretation groups (*p* > 0.05).
+**Interpretation:** No significant difference in mean diastolic BP across Vitamin D interpretation groups.
 
 ---
 
 ## How to Run
 
-1. Open the notebook `nhanes_inferential_2021_23.ipynb` in **Google Colab**.
+1. Open `nhanes_inferential_2021_23.ipynb` in **Google Colab**.
 2. Upload the `.xpt` files:  
-   `DEMO_L.xpt`, `BPXO_L.xpt`, `VID_L.xpt`, `KIQ_U_L.xpt`, `PAQ_L.xpt`, `WHQ_L.xpt`, and `BMX_L.xpt`.
+   `DEMO_L.xpt`, `BPXO_L.xpt`, `VID_L.xpt`, `KIQ_U_L.xpt`, `PAQ_L.xpt`, `WHQ_L.xpt`, `BMX_L.xpt`.
 3. Run the R cell to convert `.xpt` → `.csv`.
-4. Execute Python cells sequentially for data merging, cleaning, and analysis.
-5. Review printed outputs, visualizations, and Markdown summaries for interpretation.
+4. Run Python cells in order for merge, cleaning, and analyses.
+5. Read outputs and Markdown interpretations under each question.
 
 ---
 
 ## Notes and Limitations
 
-- Data cleaned to remove invalid codes (7777, 9999) and limited to adults (≥ 18 years).
-- NHANES uses a complex survey design; analyses are unweighted and for educational use only.
-- Statistical significance ≠ causation.
-- R was used for file conversion; all inferential tests were conducted in Python.
+- Cleaned placeholder codes (7777, 9999) and restricted to adults (≥18).
+- NHANES is a complex survey; analyses are unweighted for educational purposes.
+- Statistical significance does not imply causation.
+- R used for file conversion; inferential tests run in Python.
 
 ---
 
 ## Preferred Coding Language
 
-While both R and Python were used, I primarily prefer **Python** for data analysis and visualization. Python's `pandas`, `scipy`, and `statsmodels` libraries provide an efficient workflow for data cleaning, transformation, and inferential testing, while R demonstrates interoperability for `.xpt` → `.csv` conversion within Colab.
+While both R and Python were used, I primarily prefer **Python** for analysis and visualization. R was included to demonstrate `.xpt` → `.csv` conversion within Colab.
 
 ---
 
@@ -148,7 +145,7 @@ While both R and Python were used, I primarily prefer **Python** for data analys
 ```
 nhanes_inferential_2021_23/
 │
-├── nhanes_inferential_2021_23.ipynb   # Full Google Colab analysis (R + Python)
+├── nhanes_inferential_2021_23.ipynb   # Colab notebook (R + Python)
 └── README.md                          # Project overview and interpretations
 ```
 
@@ -156,5 +153,5 @@ nhanes_inferential_2021_23/
 
 **Author:** Jonathan Jafari, D.O.  
 **Course:** HHA 507 – Python & Data Science for Healthcare  
-**Institution:** Stony Brook University (MS – Applied Health Informatics)  
+**Institution:** Stony Brook University (MS–Applied Health Informatics)  
 **Last Updated:** October 31, 2025

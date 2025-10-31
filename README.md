@@ -88,17 +88,18 @@ cat("XPT to CSV conversion complete.\n")
 
 ---
 
-### Question 4 — Correlation Between Self-Reported Weight and Sedentary Minutes
+### Question 4 — Correlation Between Self-Reported Weight and Sedentary Behavior Time
 
-**Prompt:** Is there a correlation between self-reported weight and minutes of sedentary behavior?
+**Variables:**
+- `WHD020` → Self-reported weight (kg) → `weight_self_kg`
+- `PAD680` → Minutes per day of sedentary behavior → `sedentary_min`
 
-**Variables:** WHD020 (self-reported weight → `weight_kg`), PAD680 (sedentary minutes/day → `sedentary_min`)
+**Cleaning:**  
+Replaced placeholder values (7777, 9999) with missing; dropped rows with null values; restricted the dataset to adult participants (≥ 18 years).
 
-**Cleaning:** Remove 7777/9999; drop missing; adults only.
-
-**Test:** Pearson correlation  
-**Results:** *r* = 0.217, *p* = 5.456 × 10⁻⁸⁰  
-**Interpretation:** Positive linear correlation (weak in magnitude but statistically significant). Higher self-reported weight is associated with slightly more sedentary time.
+**Test Used:** Pearson correlation  
+**Results:** *r* = 0.149, *p* = 2.82 × 10⁻³²  
+**Interpretation:** There is a statistically significant positive linear correlation between self-reported weight and sedentary behavior time (α = 0.05). Heavier individuals tend to report slightly more sedentary minutes per day, though the relationship is weak in magnitude.
 
 ---
 

@@ -1,17 +1,20 @@
 # NHANES Data Analysis Project (2021–2023)
 
 This project explores relationships between demographic, behavioral, and health variables using data from the **National Health and Nutrition Examination Survey (NHANES)** 2021–2023.  
+
 Analyses were conducted in **Google Colab**, using **R** for data conversion and **Python** (`pandas`, `scipy`, `statsmodels`) for data cleaning, transformation, and inferential testing.
 
 ---
 
 ## Project Objective
+
 To investigate associations and differences between key demographic and health indicators using appropriate statistical methods.  
 The project includes four guided analyses and one creative question using cleaned NHANES data.
 
 ---
 
 ## Data Sources
+
 All datasets were obtained directly from the [NHANES 2021–2023 Continuous Data Portal](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2021-2023).
 
 | Dataset | Filename | Key Variables Used |
@@ -25,6 +28,7 @@ All datasets were obtained directly from the [NHANES 2021–2023 Continuous Data
 ---
 
 ## R Integration
+
 R was used to read NHANES SAS transport files (`.xpt`) and export them to `.csv` for use in Python.  
 This step demonstrates interoperability between R and Python in Colab.
 

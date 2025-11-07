@@ -10,6 +10,13 @@ Analyses were conducted in **Google Colab**, using **R** for `.xpt` → `.csv` c
 
 Investigate associations and differences between key demographic and health indicators using appropriate statistical methods. Includes four guided analyses and one creative analysis.
 
+Summary of Findings:
+Significant relationships were found between marital status and education (χ², p < 0.001), sedentary behavior and marital status (Welch t, p < 0.001), and age with systolic blood pressure (OLS, p < 0.001). 
+
+A weak but significant correlation was observed between self-reported weight and sedentary time (r = 0.15). 
+No significant difference was detected in diastolic pressure across Vitamin D levels (ANOVA, p = 0.24).
+
+
 ---
 
 ## Data Sources
@@ -54,6 +61,8 @@ cat("XPT to CSV conversion complete.\n")
 
 **Variables:** DMDMARTZ (marital status), DMDEDUC2 (education)
 
+**Why this test:** Both variables are categorical, so a Chi-square test of independence was appropriate.
+
 **Recoding/Cleaning:**
 - DMDMARTZ: Married (1) vs Not married (0); remove 77, 99
 - DMDEDUC2: Bachelor's+ (1) vs < Bachelor's (0); remove 7, 9
@@ -68,6 +77,8 @@ cat("XPT to CSV conversion complete.\n")
 
 **Variables:** DMDMARTZ (marital status), PAD680 (sedentary minutes/day → `sedentary_min`)
 
+**Why this test:** Comparing a continuous variable (sedentary minutes) between two groups with unequal variances.
+
 **Cleaning:** Remove 7777/9999, drop missing, adults only (≥18).
 
 **Test:** Welch's *t*-test  
@@ -79,6 +90,8 @@ cat("XPT to CSV conversion complete.\n")
 ### Question 3 — Effect of Age and Marital Status on Systolic Blood Pressure
 
 **Variables:** RIDAGEYR (age), DMDMARTZ (marital status), BPXOSY3 (SBP)
+
+**Why this test:** Systolic BP is continuous and modeled using one continuous (age) and one categorical (marital) predictor with OLS regression.
 
 **Cleaning/Recoding:** Remove invalid marital codes; drop missing BP; Married (1) vs Not married (0).
 
@@ -97,6 +110,8 @@ cat("XPT to CSV conversion complete.\n")
 **Cleaning:**  
 Replaced placeholder values (7777, 9999) with missing; dropped rows with null values; restricted the dataset to adult participants (≥ 18 years).
 
+**Why this test:** Both variables are continuous, meeting assumptions for a Pearson correlation.
+
 **Test Used:** Pearson correlation  
 **Results:** *r* = 0.149, *p* = 2.82 × 10⁻³²  
 **Interpretation:** There is a statistically significant positive linear correlation between self-reported weight and sedentary behavior time (α = 0.05). Heavier individuals tend to report slightly more sedentary minutes per day, though the relationship is weak in magnitude.
@@ -110,6 +125,8 @@ Replaced placeholder values (7777, 9999) with missing; dropped rows with null va
 **Variables:** LBDVD2LC (Vitamin D interpretation), BPXODI3 (DBP)
 
 **Cleaning:** Drop missing; keep valid categories.
+
+**Why this test:** Comparing mean diastolic BP across three or more Vitamin D interpretation groups using one-way ANOVA.
 
 **Test:** One-way ANOVA  
 **Results:** *F* = 1.367, *p* = 0.2423  
@@ -131,7 +148,7 @@ Replaced placeholder values (7777, 9999) with missing; dropped rows with null va
 ## Notes and Limitations
 
 - Cleaned placeholder codes (7777, 9999) and restricted to adults (≥18).
-- NHANES is a complex survey; analyses are unweighted for educational purposes.
+- **Analyses are unweighted and for educational purposes only; NHANES is a complex survey.**
 - Statistical significance does not imply causation.
 - R used for file conversion; inferential tests run in Python.
 

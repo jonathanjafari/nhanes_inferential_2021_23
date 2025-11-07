@@ -130,7 +130,7 @@ Replaced placeholder values (7777, 9999) with missing; dropped rows with null va
 
 **Test:** One-way ANOVA  
 **Results:** *F* = 1.367, *p* = 0.2423  
-**Interpretation:** No significant difference in mean diastolic BP across Vitamin D interpretation groups.
+**Interpretation:** No significant difference in mean diastolic BP across Vitamin D interpretation groups. This analysis demonstrates the application of ANOVA to a clinically relevant nutrient–blood pressure question.
 
 ---
 
